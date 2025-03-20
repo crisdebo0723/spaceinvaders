@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0bff7ivl18pq"]
+
+[ext_resource type="Script" uid="uid://82pfgodmvmeb" path="res://Scenes/invader_shot.gd" id="1_rb0q1"]
+[ext_resource type="Texture2D" uid="uid://dqyn6gkxj6slf" path="res://Assets/Weapons/Rocket.png" id="2_lydcl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nwh5k"]
+size = Vector2(8, 18)
+
+[node name="InvaderShot" type="Area2D"]
+collision_layer = 8
+script = ExtResource("1_rb0q1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(3, 3)
+texture = ExtResource("2_lydcl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nwh5k")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2(0.479999, 1)
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

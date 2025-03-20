@@ -1,0 +1,124 @@
+[gd_scene load_steps=17 format=3 uid="uid://rukcd1ef4kcw"]
+
+[ext_resource type="Script" uid="uid://cyom6m34oivw5" path="res://Scenes/invader.gd" id="1_g2sbp"]
+[ext_resource type="Texture2D" uid="uid://dy2h5dklc8h7p" path="res://Assets/Invaders/Invader1-1.png" id="1_llavx"]
+[ext_resource type="Texture2D" uid="uid://b06nkmo0fwryx" path="res://Assets/Invaders/Invader1-2.png" id="3_ttsgr"]
+[ext_resource type="Texture2D" uid="uid://bn227mp3yqjlo" path="res://Assets/Invaders/Invader2-1.png" id="4_p4hle"]
+[ext_resource type="Texture2D" uid="uid://gf81hnr41a4c" path="res://Assets/Invaders/Invader2-2.png" id="5_dngv7"]
+[ext_resource type="Texture2D" uid="uid://m4ub6oll4ikv" path="res://Assets/Invaders/Invader3-1.png" id="6_arx1k"]
+[ext_resource type="Texture2D" uid="uid://bfg1tahjcdwb4" path="res://Assets/Invaders/Invader3-2.png" id="7_k0bqa"]
+[ext_resource type="Texture2D" uid="uid://ctu8snp11c12t" path="res://Assets/Invaders/Invader-explosion-1.png" id="8_q878h"]
+[ext_resource type="Texture2D" uid="uid://dcoy6mphlfi8i" path="res://Assets/Invaders/Invader-explosion-2.png" id="9_di3de"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_v0ibg"]
+radius = 3.18902
+
+[sub_resource type="Animation" id="Animation_wqe65"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_llavx")]
+}
+
+[sub_resource type="Animation" id="Animation_3jwhv"]
+resource_name = "destroy"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("8_q878h"), ExtResource("9_di3de")]
+}
+
+[sub_resource type="Animation" id="Animation_4je7c"]
+resource_name = "move_1"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("1_llavx"), ExtResource("3_ttsgr")]
+}
+
+[sub_resource type="Animation" id="Animation_ahf82"]
+resource_name = "move_2"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("4_p4hle"), ExtResource("5_dngv7")]
+}
+
+[sub_resource type="Animation" id="Animation_irfef"]
+resource_name = "move_3"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("6_arx1k"), ExtResource("7_k0bqa")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lr6hv"]
+_data = {
+&"RESET": SubResource("Animation_wqe65"),
+&"destroy": SubResource("Animation_3jwhv"),
+&"move_1": SubResource("Animation_4je7c"),
+&"move_2": SubResource("Animation_ahf82"),
+&"move_3": SubResource("Animation_irfef")
+}
+
+[node name="Invader" type="Area2D"]
+scale = Vector2(4, 4)
+collision_layer = 4
+collision_mask = 34
+script = ExtResource("1_g2sbp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_llavx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(1.335, 1.335)
+shape = SubResource("CircleShape2D_v0ibg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_lr6hv")
+}
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

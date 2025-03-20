@@ -1,0 +1,74 @@
+[gd_scene load_steps=12 format=3 uid="uid://bi7e87hb3c24v"]
+
+[ext_resource type="Script" uid="uid://chu20xxhsdaek" path="res://Scenes/player.gd" id="1_migm2"]
+[ext_resource type="Texture2D" uid="uid://dt0af4o7yh41a" path="res://Assets/Player/Player.png" id="2_74kmh"]
+[ext_resource type="Script" uid="uid://bhb1p8db8oja4" path="res://Scenes/Shooting.gd" id="3_1npr4"]
+[ext_resource type="PackedScene" uid="uid://dden13q22dei" path="res://Scenes/Laser.tscn" id="4_ogmla"]
+[ext_resource type="Texture2D" uid="uid://bi2vdab3slwgf" path="res://Assets/Player/Player-explosion1.png" id="5_eblck"]
+[ext_resource type="Texture2D" uid="uid://b4mk25ro2nqtu" path="res://Assets/Player/Player-explosion2.png" id="6_8obu8"]
+[ext_resource type="Texture2D" uid="uid://dsg2krqtkgnca" path="res://Assets/Player/Player-explosion3.png" id="7_huwb7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dw1is"]
+size = Vector2(14, 4.5)
+
+[sub_resource type="Animation" id="Animation_sfgbc"]
+resource_name = "Destroy"
+length = 2.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("5_eblck"), ExtResource("6_8obu8"), ExtResource("7_huwb7"), ExtResource("5_eblck"), ExtResource("6_8obu8"), ExtResource("7_huwb7"), ExtResource("5_eblck"), ExtResource("6_8obu8"), ExtResource("7_huwb7")]
+}
+
+[sub_resource type="Animation" id="Animation_b3d78"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_74kmh")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d4q2y"]
+_data = {
+&"Destroy": SubResource("Animation_sfgbc"),
+&"RESET": SubResource("Animation_b3d78")
+}
+
+[node name="Player" type="Area2D"]
+scale = Vector2(4, 4)
+script = ExtResource("1_migm2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_74kmh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_dw1is")
+
+[node name="ShotOrigin" type="Node2D" parent="."]
+position = Vector2(0, -4)
+script = ExtResource("3_1npr4")
+laser_scene = ExtResource("4_ogmla")
+
+[node name="Destroy" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_d4q2y")
+}
+
+[connection signal="animation_finished" from="Destroy" to="." method="_on_destroy_animation_finished"]
